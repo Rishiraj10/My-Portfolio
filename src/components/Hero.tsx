@@ -10,7 +10,7 @@ export default function Hero() {
             Android Developer
           </span>
           <br />
-          <span className="text-gray-800 dark:text-gray-100">& Game Devloper</span>
+          <span className="text-gray-800 dark:text-gray-100">& Game Developer</span>
         </h1>
         <p className="text-xl text-gray-600 dark:text-gray-300 mb-8 max-w-2xl mx-auto animate-fade-in">
           I'm Rishi Raj. Passionate about creating impactful mobile experiences
