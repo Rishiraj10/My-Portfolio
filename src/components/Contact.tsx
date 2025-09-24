@@ -20,10 +20,10 @@ export default function Contact() {
     if (formRef.current) {
       emailjs
         .sendForm(
-          'service_v9wus7j',  // Your Service ID
-          'template_229498r',  // Your Template ID
-          formRef.current,     // Form ref
-          'do_n1OngrjpAGETRA'  // Your Public API Key
+          import.meta.env.VITE_EMAILJS_SERVICE_ID,   // Service ID
+          import.meta.env.VITE_EMAILJS_TEMPLATE_ID,  // Template ID
+          formRef.current,                           // Form reference
+          import.meta.env.VITE_EMAILJS_PUBLIC_KEY    // Public API key
         )
         .then(
           (result) => {
