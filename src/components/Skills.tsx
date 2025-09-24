@@ -44,15 +44,16 @@ export default function Skills() {
         <h2 className="text-3xl font-bold text-center mb-12 text-gray-900 dark:text-white animate-slide-down">
           Skills & Expertise
         </h2>
-        <div className="grid md:grid-cols-2 gap-12">
+        <div className="grid lg:grid-cols-2 gap-8 lg:gap-12">
+          {/* Technical Skills */}
           <div className="animate-slide-in-right">
             <h3 className="text-xl font-semibold mb-6 text-gray-900 dark:text-white">Technical Skills</h3>
             {loading ? (
-              <div className="space-y-4">
-                {[1, 2, 3, 4].map(i => (
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {[1, 2, 3, 4, 5, 6, 7, 8].map(i => (
                   <div key={i} className="animate-pulse">
                     <div className="flex justify-between mb-1">
-                      <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-1/4"></div>
+                      <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-1/3"></div>
                       <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-10"></div>
                     </div>
                     <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
@@ -62,12 +63,20 @@ export default function Skills() {
                 ))}
               </div>
             ) : (
-              <div className="space-y-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
                 {skills.technical.map((skill, index) => (
-                  <div key={skill.id} style={{ animationDelay: `${index * 100}ms` }} className="animate-slide-up">
+                  <div 
+                    key={skill.id} 
+                    style={{ animationDelay: `${index * 100}ms` }} 
+                    className="animate-slide-up"
+                  >
                     <div className="flex justify-between mb-1">
-                      <span className="text-gray-700 dark:text-gray-300">{skill.name}</span>
-                      <span className="text-gray-500 dark:text-gray-400">{skill.level}%</span>
+                      <span className="text-gray-700 dark:text-gray-300 text-sm sm:text-base truncate max-w-[120px] sm:max-w-none">
+                        {skill.name}
+                      </span>
+                      <span className="text-gray-500 dark:text-gray-400 text-sm sm:text-base whitespace-nowrap">
+                        {skill.level}%
+                      </span>
                     </div>
                     <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
                       <div
@@ -80,21 +89,23 @@ export default function Skills() {
               </div>
             )}
           </div>
+
+          {/* Soft Skills */}
           <div className="animate-slide-in-right" style={{ animationDelay: '200ms' }}>
             <h3 className="text-xl font-semibold mb-6 text-gray-900 dark:text-white">Soft Skills</h3>
             {loading ? (
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-2 gap-3 sm:gap-4">
                 {[1, 2, 3, 4, 5, 6].map(i => (
-                  <div key={i} className="bg-white dark:bg-gray-800 p-4 rounded-lg h-10 animate-pulse"></div>
+                  <div key={i} className="bg-white dark:bg-gray-800 p-3 sm:p-4 rounded-lg h-12 sm:h-14 animate-pulse"></div>
                 ))}
               </div>
             ) : (
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-2 gap-3 sm:gap-4">
                 {skills.soft.map((skill, index) => (
                   <div
                     key={skill.id}
                     style={{ animationDelay: `${index * 100}ms` }}
-                    className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm border border-gray-100 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:scale-105 transform transition-all duration-300 animate-fade-in"
+                    className="bg-white dark:bg-gray-800 p-3 sm:p-4 rounded-lg shadow-sm border border-gray-100 dark:border-gray-700 text-gray-700 dark:text-gray-300 text-center text-sm sm:text-base hover:scale-105 transform transition-all duration-300 animate-fade-in flex items-center justify-center min-h-[48px] sm:min-h-[56px]"
                   >
                     {skill.name}
                   </div>

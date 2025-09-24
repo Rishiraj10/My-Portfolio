@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Github, ExternalLink } from 'lucide-react';
+import { Github, ExternalLink, ChevronDown } from 'lucide-react';
 import { collection, onSnapshot } from 'firebase/firestore';
 import { db } from '../firebase';
 
@@ -15,6 +15,8 @@ interface Project {
 export default function Projects() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
+  const [displayCount, setDisplayCount] = useState(6);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
 
   useEffect(() => {
     const projectsRef = collection(db, 'projects');
@@ -33,6 +35,18 @@ export default function Projects() {
 
     return () => unsubscribe();
   }, []);
+
+  const loadMoreProjects = () => {
+    setIsLoadingMore(true);
+    // Simulate loading delay for better UX
+    setTimeout(() => {
+      setDisplayCount(prevCount => prevCount + 3);
+      setIsLoadingMore(false);
+    }, 300);
+  };
+
+  const displayedProjects = projects.slice(0, displayCount);
+  const hasMoreProjects = projects.length > displayCount;
 
   return (
     <section id="projects" className="py-20 bg-white dark:bg-gray-800">
@@ -63,50 +77,75 @@ export default function Projects() {
             ))}
           </div>
         ) : (
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {projects.map((project, index) => (
-              <div 
-                key={project.id} 
-                className="bg-white dark:bg-gray-900 rounded-xl shadow-lg overflow-hidden border border-gray-100 dark:border-gray-700 hover:shadow-xl transition-all duration-300 hover:scale-105 transform animate-slide-up"
-                style={{ animationDelay: `${index * 200}ms` }}
-              >
-                <div className="p-6">
-                  <h3 className="text-xl font-semibold mb-2 text-gray-900 dark:text-white">{project.title}</h3>
-                  <p className="text-gray-600 dark:text-gray-300 mb-4">{project.description}</p>
-                  <div className="flex flex-wrap gap-2 mb-4">
-                    {project.tech.map((tech) => (
-                      <span
-                        key={tech}
-                        className="px-3 py-1 bg-indigo-50 dark:bg-indigo-900/20 text-indigo-600 dark:text-indigo-400 rounded-full text-sm hover:scale-110 transition-transform duration-300"
+          <>
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {displayedProjects.map((project, index) => (
+                <div 
+                  key={project.id} 
+                  className="bg-white dark:bg-gray-900 rounded-xl shadow-lg overflow-hidden border border-gray-100 dark:border-gray-700 hover:shadow-xl transition-all duration-300 hover:scale-105 transform animate-slide-up"
+                  style={{ animationDelay: `${index * 200}ms` }}
+                >
+                  <div className="p-6">
+                    <h3 className="text-xl font-semibold mb-2 text-gray-900 dark:text-white">{project.title}</h3>
+                    <p className="text-gray-600 dark:text-gray-300 mb-4">{project.description}</p>
+                    <div className="flex flex-wrap gap-2 mb-4">
+                      {project.tech.map((tech) => (
+                        <span
+                          key={tech}
+                          className="px-3 py-1 bg-indigo-50 dark:bg-indigo-900/20 text-indigo-600 dark:text-indigo-400 rounded-full text-sm hover:scale-110 transition-transform duration-300"
+                        >
+                          {tech}
+                        </span>
+                      ))}
+                    </div>
+                    <div className="flex space-x-4">
+                      <a
+                        href={project.github}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 hover:translate-x-1 transition-transform duration-300"
                       >
-                        {tech}
-                      </span>
-                    ))}
-                  </div>
-                  <div className="flex space-x-4">
-                    <a
-                      href={project.github}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 hover:translate-x-1 transition-transform duration-300"
-                    >
-                      <Github className="w-5 h-5 mr-1" />
-                      Code
-                    </a>
-                    <a
-                      href={project.demo}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 hover:translate-x-1 transition-transform duration-300"
-                    >
-                      <ExternalLink className="w-5 h-5 mr-1" />
-                      Demo
-                    </a>
+                        <Github className="w-5 h-5 mr-1" />
+                        Code
+                      </a>
+                      <a
+                        href={project.demo}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 hover:translate-x-1 transition-transform duration-300"
+                      >
+                        <ExternalLink className="w-5 h-5 mr-1" />
+                        Demo
+                      </a>
+                    </div>
                   </div>
                 </div>
+              ))}
+            </div>
+
+            {/* Load More Button */}
+            {hasMoreProjects && (
+              <div className="flex justify-center mt-12">
+                <button
+                  onClick={loadMoreProjects}
+                  disabled={isLoadingMore}
+                  className="flex items-center gap-2 px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-lg transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {isLoadingMore ? (
+                    <>
+                      <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                      Loading...
+                    </>
+                  ) : (
+                    <>
+                      See More Projects
+                      <ChevronDown className="w-4 h-4" />
+                    </>
+                  )}
+                </button>
               </div>
-            ))}
-          </div>
+            )}
+          </>
         )}
       </div>
     </section>
